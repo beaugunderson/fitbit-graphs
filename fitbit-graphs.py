@@ -89,6 +89,27 @@ def graph_fitbit(filename):
     print 'Saving...'
     plt.savefig('all', bbox_inches='tight')
 
+    print 'Plotting all traces...'
+
+    fig = plt.figure(figsize=SIZE)
+    fig.set_dpi(300)
+
+    ax = seaborn.tsplot(stacked_values,
+                        value='Steps per Minute',
+                        linewidth=1.0,
+                        ci=50,
+                        err_style='unit_traces',
+                        err_kws={'alpha': 0.1},
+                        estimator=scipy.stats.nanmean)
+
+    ax.xaxis.set_ticks(numpy.arange(0, 1440, 1440 / 24))
+    ax.xaxis.set_major_formatter(ShorterDateFormatter)
+
+    fig.tight_layout()
+
+    print 'Saving...'
+    plt.savefig('all-traces', bbox_inches='tight')
+
     print 'Plotting by day data...'
 
     fig = plt.figure(figsize=SIZE)
@@ -111,7 +132,7 @@ def graph_fitbit(filename):
         ax.xaxis.set_major_formatter(ShorterDateFormatter)
 
     # Add legend to last axis
-    for day in xrange(0, 6):
+    for day in xrange(0, 7):
         p = plt.Rectangle((0, 0), 0, 0,
                           label=good_labels[day],
                           color=palette[day])
