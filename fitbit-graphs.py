@@ -6,10 +6,10 @@ from __future__ import division
 from collections import defaultdict
 from datetime import datetime, timedelta
 
+import bottleneck
 import matplotlib.pyplot as plt
 import numpy
 import pandas
-import scipy
 import seaborn
 
 from matplotlib.ticker import FuncFormatter
@@ -26,10 +26,13 @@ SIZE = (30, 7)
 
 
 def graph_fitbit(filename):
+    """
+    Generate all graphs for a given file.
+    """
     try:
         print 'Reading pickle file...'
         data = pandas.io.pickle.read_pickle('./ernesto.pickle')
-    except:
+    except IOError:
         print 'Falling back to CSV...'
         print 'Reading file...'
         data = pandas.io.parsers.read_csv(filename,
@@ -79,7 +82,7 @@ def graph_fitbit(filename):
                         linewidth=1.0,
                         ci=50,
                         # err_style='unit_traces',
-                        estimator=scipy.stats.nanmean)
+                        estimator=bottleneck.nanmean)
 
     ax.xaxis.set_ticks(numpy.arange(0, 1440, 1440 / 24))
     ax.xaxis.set_major_formatter(ShorterDateFormatter)
@@ -100,7 +103,7 @@ def graph_fitbit(filename):
                         ci=50,
                         err_style='unit_traces',
                         err_kws={'alpha': 0.1},
-                        estimator=scipy.stats.nanmean)
+                        estimator=bottleneck.nanmean)
 
     ax.xaxis.set_ticks(numpy.arange(0, 1440, 1440 / 24))
     ax.xaxis.set_major_formatter(ShorterDateFormatter)
@@ -126,7 +129,7 @@ def graph_fitbit(filename):
                             linewidth=1.0,
                             color=palette[day],
                             ci=50,
-                            estimator=scipy.stats.nanmean)
+                            estimator=bottleneck.nanmean)
 
         ax.xaxis.set_ticks(numpy.arange(0, 1440, 1440 / 24))
         ax.xaxis.set_major_formatter(ShorterDateFormatter)
